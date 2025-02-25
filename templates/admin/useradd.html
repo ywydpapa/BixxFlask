@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include '/comm/adheader.html' %}
+</head>
+<body id="page-top">
+<!-- Page Wrapper -->
+<div id="wrapper">
+    {% include '/comm/sidebar.html' %}
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            {% include '/comm/adtopbar.html' %}
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+                <h3 class="h3 mb-4 text-gray-800">사용자 추가</h3>
+                <hr>
+                <form action="/updatecust" method="post" onsubmit="return confirm('고객의 정보를 저장하시겠습니까?');">
+                    <table class="form-control table table-bordered">
+                        <tbody>
+                        <tr>
+                            <td>
+                                고객명
+                            </td>
+                            <td>
+                                <label for="custname"></label><input type="text" id="custname" name="custname" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                고객아이디
+                            </td>
+                            <td>
+                                <label for="custid"></label><input type="text" id="custid" name="custid" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                누적금액
+                            </td>
+                            <td>
+                                <label for="balamt"></label><input type="text" id="balamt" name="balamt" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                청구일
+                            </td>
+                            <td>
+                                <label for="settdate"></label><input type="text" id="settdate" name="settdate" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                계약시작일
+                            </td>
+                            <td>
+                                <label for="contfr"></label><input type="text" id="contfr" name="contfr" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                계약종료일
+                            </td>
+                            <td>
+                                <label for="contto"></label><input type="text" id="contto" name="contto" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                서버번호
+                            </td>
+                            <td>
+                                <label for="svrno"></label><input type="text" id="svrno" name="svrno" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                전화번호
+                            </td>
+                            <td>
+                                <label for="telno"></label><input type="text" id="telno" name="telno" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                메일주소
+                            </td>
+                            <td>
+                                <label for="mailaddr"></label><input type="text" id="mailaddr" name="mailaddr" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                SNS
+                            </td>
+                            <td>
+                                <label for="snsid"></label><input type="text" id="snsid" name="snsid" value="">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button class="form-control btn-danger" type="submit">고객정보 수정</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+        <!-- Footer -->
+        <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright &copy; K3 Labs 2024</span>
+                </div>
+            </div>
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+</div>
+<!-- End of Page Wrapper -->
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+<!-- Bootstrap core JavaScript-->
+{% include '/comm/adscript.html' %}
+</body>
+<script>
+    $(document).ready(function () {
+    });
+</script>
+</html>
