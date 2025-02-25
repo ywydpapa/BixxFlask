@@ -38,7 +38,7 @@ def selectUsers(uid, upw):
     row = None
     setkey = None
     try:
-        sql = "SELECT userNo, userName, serverNo, userRole FROM traceUser WHERE userPasswd=password(%s) AND userId=%s AND attrib NOT LIKE %s"
+        sql = "SELECT userNo, userName, serverNo, userRole FROM bixxUser WHERE userPasswd=password(%s) AND userId=%s AND attrib NOT LIKE %s"
         cur1.execute(sql, (upw, uid, str("%XXX")))
         row = cur1.fetchone()
         print(row)
@@ -58,7 +58,7 @@ def listUsers():
     cur2 = db.cursor()
     row = None
     try:
-        sql = "SELECT * FROM traceUser WHERE attrib NOT LIKE %s"
+        sql = "SELECT * FROM bixxUser WHERE attrib NOT LIKE %s"
         cur2.execute(sql, str("%XXX"))
         rows = cur2.fetchall()
     except Exception as e:
@@ -75,7 +75,7 @@ def detailuser(uno):
     cur3 = db.cursor()
     row = None
     try:
-        sql = "SELECT * FROM traceUser WHERE userNo = %s and attrib NOT LIKE %s"
+        sql = "SELECT * FROM bixxUser WHERE userNo = %s and attrib NOT LIKE %s"
         cur3.execute(sql, (uno, str("%XXX")))
         rows = cur3.fetchone()
     except Exception as e:
@@ -90,7 +90,7 @@ def setKeys(uno, setkey):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur4 = db.cursor()
     try:
-        sql = "UPDATE traceUser SET setupKey = %s, lastLogin = now() where userNo=%s"
+        sql = "UPDATE bixxUser SET setupKey = %s, lastLogin = now() where userNo=%s"
         cur4.execute(sql, (setkey, uno))
         db.commit()
     except Exception as e:
@@ -124,7 +124,7 @@ def checkwallet(uno, setkey):
     walletitems = []
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur5 = db.cursor()
-    sql = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
+    sql = "SELECT apiKey1, apiKey2 FROM bixxUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
     cur5.execute(sql, (setkey, uno, '%XXX'))
     keys = cur5.fetchall()
     if len(keys) == 0:
@@ -144,7 +144,7 @@ def checkwalletwon(uno, setkey):
     walletwon = []
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur6 = db.cursor()
-    sql = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
+    sql = "SELECT apiKey1, apiKey2 FROM bixxUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
     cur6.execute(sql, (setkey, uno, '%XXX'))
     keys = cur6.fetchall()
     if len(keys) == 0:
@@ -163,11 +163,11 @@ def tradehistory(uno, setkey):
     tradelist = []
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur7 = db.cursor()
-    sql = "SELECT bidCoin from traceSetup where userNo = %s and attrib not like %s "
+    sql = "SELECT bidCoin from bixxSetup where userNo = %s and attrib not like %s "
     cur7.execute(sql, (uno, '%XXXUP'))
     data = cur7.fetchone()
     coinn = data[0]
-    sql2 = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
+    sql2 = "SELECT apiKey1, apiKey2 FROM bixxUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
     cur7.execute(sql2, (setkey, uno, '%XXX'))
     keys = cur7.fetchone()
     if len(keys) == 0:
@@ -185,7 +185,7 @@ def tradehistory(uno, setkey):
 def checkkey(uno, setkey):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur8 = db.cursor()
-    sql = "SELECT * from traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
+    sql = "SELECT * from bixxUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
     cur8.execute(sql, (setkey, uno, '%XXX'))
     result = cur8.fetchall()
     cur8.close()
@@ -200,7 +200,7 @@ def checkkey(uno, setkey):
 def erasebid(uno, setkey, tabindex):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur9 = db.cursor()
-    sql = "SELECT * from traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
+    sql = "SELECT * from bixxUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
     cur9.execute(sql, (setkey, uno, '%XXX'))
     result = cur9.fetchall()
     if len(result) == 0:
@@ -209,7 +209,7 @@ def erasebid(uno, setkey, tabindex):
         db.close()
         return False
     else:
-        sql2 = "update traceSetup set attrib=%s where userNo=%s and slot = %s"
+        sql2 = "update bixxSetup set attrib=%s where userNo=%s and slot = %s"
         cur9.execute(sql2, ("XXXUPXXXUPXXXUP", uno, tabindex))
         db.commit()
         cur9.close()
@@ -226,7 +226,7 @@ def setupbid(uno, setkey, initbid, bidstep, bidrate, askrate, coinn, svrno, trad
         try:
             db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
             cur0 = db.cursor()
-            sql = "insert into traceSetup (userNo, initAsset, bidInterval, bidRate, askrate, bidCoin, custKey ,serverNo, holdNo, doubleYN, limitAmt, limitYN, slot, regDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())"
+            sql = "insert into bixxSetup (userNo, initAsset, bidInterval, bidRate, askrate, bidCoin, custKey ,serverNo, holdNo, doubleYN, limitAmt, limitYN, slot, regDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, now())"
             cur0.execute(sql, (
             uno, initbid, bidstep, bidrate, askrate, coinn, tradeset, svrno, holdNo, doubleYN, limitamt, limityn, slot))
             db.commit()
@@ -251,10 +251,10 @@ def editbidsetup(sno, uno, setkey, initbid, bidstep, bidrate, askrate, coinn, sv
         try:
             db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
             cur0 = db.cursor()
-            sqlp = "update traceSetup set attrib=%s where setupNo=%s"
+            sqlp = "update bixxSetup set attrib=%s where setupNo=%s"
             cur0.execute(sqlp, ("XXXUPXXXUPXXXUP", sno))
             db.commit()
-            sql = "insert into traceSetup (userNo, initAsset, bidInterval, bidRate, askrate, bidCoin, custKey ,serverNo, holdNo, doubleYN, limitYN, limitAmt, slot ,regDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ,now())"
+            sql = "insert into bixxSetup (userNo, initAsset, bidInterval, bidRate, askrate, bidCoin, custKey ,serverNo, holdNo, doubleYN, limitYN, limitAmt, slot ,regDate) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s ,now())"
             cur0.execute(sql, (
             uno, initbid, bidstep, bidrate, askrate, coinn, tradeset, svrno, holdNo, doubleYN, limitYN, limitAmt,
             tabindex))
@@ -282,7 +282,7 @@ def setuptrbidadmin(uno, setkey, settitle, bidstep, stp0, stp1, stp2, stp3, stp4
             db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
             cur11 = db.cursor()
             sql = (
-                "insert into traceSets (setTitle, setInterval, step0, step1, step2, step3, step4, step5, step6, step7, step8, step9,"
+                "insert into bixxSets (setTitle, setInterval, step0, step1, step2, step3, step4, step5, step6, step7, step8, step9,"
                 " inter0, inter1, inter2, inter3, inter4, inter5, inter6, inter7, inter8, inter9,"
                 "bid0,bid1,bid2,bid3,bid4,bid5,bid6,bid7,bid8,bid9,"
                 "max0,max1,max2,max3,max4,max5,max6,max7,max8,max9,"
@@ -312,7 +312,7 @@ def getsetup(uno):
     try:
         db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
         cur12 = db.cursor()
-        sql = "SELECT bidCoin, initAsset, bidInterval, bidRate, askRate, activeYN, custKey, holdYN, holdNo, doubleYN  from traceSetup where userNo=%s and attrib not like %s"
+        sql = "SELECT bidCoin, initAsset, bidInterval, bidRate, askRate, activeYN, custKey, holdYN, holdNo, doubleYN  from bixxSetup where userNo=%s and attrib not like %s"
         cur12.execute(sql, (uno, '%XXXUP'))
         data = list(cur12.fetchone())
         return data
@@ -328,7 +328,7 @@ def getsetupmax(uno, sdate):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur12 = db.cursor()
     try:
-        sql = "SELECT bidCoin, initAsset, bidInterval, bidRate, askRate, activeYN, custKey, holdYN, holdNo, doubleYN  from traceSetup where userNo=%s and regDate <= %s order by regDate desc"
+        sql = "SELECT bidCoin, initAsset, bidInterval, bidRate, askRate, activeYN, custKey, holdYN, holdNo, doubleYN  from bixxSetup where userNo=%s and regDate <= %s order by regDate desc"
         cur12.execute(sql, (uno, sdate))
         data = list(cur12.fetchone())
         return data
@@ -344,10 +344,10 @@ def getsetups(uno, slotno):
     cur13 = db.cursor()
     try:
         if slotno == 0:
-            sql = "select * from traceSetup where userNo=%s and attrib not like %s"
+            sql = "select * from bixxSetup where userNo=%s and attrib not like %s"
             cur13.execute(sql, (uno, '%XXXUP'))
         else:
-            sql = "select * from traceSetup where userNo=%s and slot = %s and attrib not like %s"
+            sql = "select * from bixxSetup where userNo=%s and slot = %s and attrib not like %s"
             cur13.execute(sql, (uno, slotno, '%XXXUP'))
         data = list(cur13.fetchall())
         return data
@@ -362,7 +362,7 @@ def getlicence(uno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur13 = db.cursor()
     try:
-        sql = "select tradeCnt from traceUser where userNo=%s and attrib not like %s"
+        sql = "select tradeCnt from bixxUser where userNo=%s and attrib not like %s"
         cur13.execute(sql, (uno, '%XXXUP'))
         data = cur13.fetchone()
         return data
@@ -377,7 +377,7 @@ def setonoff(uno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14 = db.cursor()
     try:
-        sql = "UPDATE traceSetup SET activeYN = %s where userNo=%s AND attrib not like %s"
+        sql = "UPDATE bixxSetup SET activeYN = %s where userNo=%s AND attrib not like %s"
         cur14.execute(sql, (yesno, uno, '%XXXUP'))
         db.commit()
     except Exception as e:
@@ -391,7 +391,7 @@ def setallonoff(uno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14 = db.cursor()
     try:
-        sql = "UPDATE traceSetup SET activeYN = %s where userNo=%s AND attrib not like %s"
+        sql = "UPDATE bixxSetup SET activeYN = %s where userNo=%s AND attrib not like %s"
         cur14.execute(sql, (yesno, uno, '%XXXUP'))
         db.commit()
     except Exception as e:
@@ -405,7 +405,7 @@ def setonoffs(setno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14 = db.cursor()
     try:
-        sql = "UPDATE traceSetup SET activeYN = %s where setupNo=%s AND attrib not like %s"
+        sql = "UPDATE bixxSetup SET activeYN = %s where setupNo=%s AND attrib not like %s"
         cur14.execute(sql, (yesno, setno, '%XXXUP'))
         db.commit()
     except Exception as e:
@@ -419,7 +419,7 @@ def setholdreset(uno, hr):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14_1 = db.cursor()
     try:
-        sql = "UPDATE traceSetup SET holdYN = %s where userNo=%s AND attrib not like %s"
+        sql = "UPDATE bixxSetup SET holdYN = %s where userNo=%s AND attrib not like %s"
         cur14_1.execute(sql, (hr, uno, '%XXXUP'))
         db.commit()
     except Exception as e:
@@ -433,7 +433,7 @@ def setautostop(sno, yesno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur14_2 = db.cursor()
     try:
-        sql = "UPDATE traceSetup SET doubleYN = %s where setupNo=%s"
+        sql = "UPDATE bixxSetup SET doubleYN = %s where setupNo=%s"
         cur14_2.execute(sql, (yesno, sno))
         db.commit()
     except Exception as e:
@@ -449,7 +449,7 @@ def getseton():
     data = []
     print("GetKey !!")
     try:
-        sql = "SELECT userNo from traceSetup where attrib not like %s"
+        sql = "SELECT userNo from bixxSetup where attrib not like %s"
         cur15.execute(sql, '%XXXUP')
         data = cur15.fetchall()
         return data
@@ -465,7 +465,7 @@ def getsetonsvr(svrNo):
     cur16 = db.cursor()
     data = []
     try:
-        sql = "SELECT userNo from traceSetup where attrib not like %s and serverNo=%s"
+        sql = "SELECT userNo from bixxSetup where attrib not like %s and serverNo=%s"
         cur16.execute(sql, ('%XXXUP', svrNo))
         data = cur16.fetchall()
         return data
@@ -480,7 +480,7 @@ def getupbitkey(uno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur17 = db.cursor()
     try:
-        sql = "SELECT apiKey1, apiKey2 FROM traceUser WHERE userNo=%s and attrib not like %s"
+        sql = "SELECT apiKey1, apiKey2 FROM bixxUser WHERE userNo=%s and attrib not like %s"
         cur17.execute(sql, (uno, '%XXXUP'))
         data = cur17.fetchone()
         return data
@@ -541,7 +541,7 @@ def selectsets():
     cur19 = db.cursor()
     row = None
     try:
-        sql = "SELECT * FROM traceSets WHERE attrib NOT LIKE %s"
+        sql = "SELECT * FROM bixxSets WHERE attrib NOT LIKE %s"
         cur19.execute(sql, str("%XXX"))
         rows = cur19.fetchall()
     except Exception as e:
@@ -558,7 +558,7 @@ def setdetail(setno):
     cur20 = db.cursor()
     row = None
     try:
-        sql = "SELECT * FROM traceSets WHERE setNo = %s"
+        sql = "SELECT * FROM bixxSets WHERE setNo = %s"
         cur20.execute(sql, setno)
         rows = cur20.fetchone()
     except Exception as e:
@@ -575,7 +575,7 @@ def selectsetlist(sint):
     cur21 = db.cursor()
     row = None
     try:
-        sql = "SELECT * FROM traceSets WHERE useYN = %s and attrib NOT LIKE %s"
+        sql = "SELECT * FROM bixxSets WHERE useYN = %s and attrib NOT LIKE %s"
         if sint > 0:
             useyn = 'Y'
         else:
@@ -594,7 +594,7 @@ def setmypasswd(uno, passwd):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur22 = db.cursor()
     try:
-        sql = "UPDATE traceUser SET userPasswd = password(%s) where userNo=%s"
+        sql = "UPDATE bixxUser SET userPasswd = password(%s) where userNo=%s"
         cur22.execute(sql, (passwd, uno))
         db.commit()
     except Exception as e:
@@ -608,7 +608,7 @@ def updateuserdetail(uno, key1, key2, svrno):
     db = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur23 = db.cursor()
     try:
-        sql = "UPDATE traceUser SET apiKey1 = %s, apiKey2 = %s, serverNo = %s where userNo = %s"
+        sql = "UPDATE bixxUser SET apiKey1 = %s, apiKey2 = %s, serverNo = %s where userNo = %s"
         cur23.execute(sql, (key1, key2, svrno, uno))
         db.commit()
     except Exception as e:
@@ -627,7 +627,7 @@ def updatetrbidadmin(uno, setkey, settitle, bidstep, stp0, stp1, stp2, stp3, stp
         cur24 = db24.cursor()
         try:
             sql = (
-                "UPDATE traceSets set setTitle = %s, setInterval = %s, step0 = %s, step1 = %s, step2 = %s, step3 = %s, step4 = %s, step5 = %s, step6 = %s, step7 = %s, step8 = %s, step9 = %s, "
+                "UPDATE bixxSets set setTitle = %s, setInterval = %s, step0 = %s, step1 = %s, step2 = %s, step3 = %s, step4 = %s, step5 = %s, step6 = %s, step7 = %s, step8 = %s, step9 = %s, "
                 "inter0 = %s, inter1 = %s, inter2 = %s, inter3 = %s, inter4 = %s, inter5 = %s, inter6 = %s, inter7 = %s, inter8 = %s, inter9 = %s, "
                 "bid0 = %s,bid1 = %s,bid2 = %s,bid3 = %s,bid4 = %s,bid5 = %s,bid6 = %s,bid7 = %s,bid8 = %s,bid9 = %s,max0=%s,max1=%s,max2=%s,max3=%s,max4=%s,max5=%s,max6=%s,max7=%s,max8=%s,max9=%s,"
                 "net0=%s,net1=%s,net2=%s,net3=%s,net4=%s,net5=%s,net6=%s,net7=%s,net8=%s,net9=%s,modDate = now() where setNo = %s")
@@ -650,7 +650,7 @@ def settingonoff(sno, yesno):
     db25 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur25 = db25.cursor()
     try:
-        sql = "UPDATE traceSets SET useYN = %s where setNo=%s"
+        sql = "UPDATE bixxSets SET useYN = %s where setNo=%s"
         cur25.execute(sql, (yesno, sno))
         db25.commit()
     except Exception as e:
@@ -830,7 +830,7 @@ def cancelorder(uno, uuid):
     db36 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur36 = db36.cursor()
     try:
-        sql = "select apiKey1, apiKey2 from traceUser where userNo=%s"
+        sql = "select apiKey1, apiKey2 from bixxUser where userNo=%s"
         cur36.execute(sql, (uno))
         keys = cur36.fetchone()
         upbit = pyupbit.Upbit(keys[0], keys[1])
@@ -877,7 +877,7 @@ def tradelist():
     db39 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur39 = db39.cursor()
     try:
-        sql = "select b.userName, a.*, c.setTitle from traceSetup a join traceUser b on a.userNo = b.userNo join traceSets c on a.custKey = c.setNo where a.attrib = %s"
+        sql = "select b.userName, a.*, c.setTitle from bixxSetup a join bixxUser b on a.userNo = b.userNo join bixxSets c on a.custKey = c.setNo where a.attrib = %s"
         cur39.execute(sql, "100001000010000")
         rows = cur39.fetchall()
     except Exception as e:
@@ -909,7 +909,7 @@ def tradedcoins(uno):
     db40 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur40 = db40.cursor()
     try:
-        sql = "select distinct bidCoin from traceSetup where userNo=%s"
+        sql = "select distinct bidCoin from bixxSetup where userNo=%s"
         cur40.execute(sql, (uno))
         coins = cur40.fetchall()
         coins = [list(coins[x]) for x in range(len(coins))]
@@ -998,7 +998,7 @@ def mysettinglist(uno):
     db45 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur45 = db45.cursor()
     try:
-        sql = "select initAsset, bidInterval, doubleYN, left(max(regDate),10) as date from traceSetup ts where userNo = %s and left(regDate ,10) >= DATE_ADD(now(), INTERVAL -2 month) group by left(regDate, 10)"
+        sql = "select initAsset, bidInterval, doubleYN, left(max(regDate),10) as date from bixxSetup ts where userNo = %s and left(regDate ,10) >= DATE_ADD(now(), INTERVAL -2 month) group by left(regDate, 10)"
         cur45.execute(sql, (uno))
         rows = cur45.fetchall()
     except Exception as e:
@@ -1014,7 +1014,7 @@ def mytradesetlist(uno):
     db46 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur46 = db46.cursor()
     try:
-        sql = "select * from traceSetup where userNo = %s and attrib not like %s order by slot"
+        sql = "select * from bixxSetup where userNo = %s and attrib not like %s order by slot"
         cur46.execute(sql, (uno, "XXXUP%"))
         rows = cur46.fetchall()
     except Exception as e:
@@ -1080,7 +1080,7 @@ def changesvr(uno, svrno):
     db49 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur49 = db49.cursor()
     try:
-        sql = "UPDATE traceSetup set serverNo = %s where userNo = %s and attrib not like %s"
+        sql = "UPDATE bixxSetup set serverNo = %s where userNo = %s and attrib not like %s"
         cur49.execute(sql, (svrno, uno, "XXXUP%"))
         db49.commit()
     except Exception as e:
@@ -1095,7 +1095,7 @@ def getsetupitem(setupno):
     db50 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur50 = db50.cursor()
     try:
-        sql = "select userNo, bidCoin from traceSetup where setupNo = %s "
+        sql = "select userNo, bidCoin from bixxSetup where setupNo = %s "
         cur50.execute(sql, setupno)
         rows = cur50.fetchone()
     except Exception as e:
@@ -1111,7 +1111,7 @@ def checkwalletremains(uno, coinn):
     db51 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur51 = db51.cursor()
     try:
-        sql = "select apiKey1, apiKey2 from traceUser where userNo = %s and attrib not like %s"
+        sql = "select apiKey1, apiKey2 from bixxUser where userNo = %s and attrib not like %s"
         cur51.execute(sql, (uno, "XXXUP%"))
         keys = cur51.fetchone()
         upbit = pyupbit.Upbit(keys[0], keys[1])
@@ -1162,7 +1162,7 @@ def tradehistorys(uno, setkey, coinn):
     tradelist2 = []
     db54 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur54 = db54.cursor()
-    sql2 = "SELECT apiKey1, apiKey2 FROM traceUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
+    sql2 = "SELECT apiKey1, apiKey2 FROM bixxUser WHERE setupKey=%s AND userNo=%s and attrib not like %s"
     cur54.execute(sql2, (setkey, uno, '%XXX'))
     keys = cur54.fetchone()
     if len(keys) == 0:
@@ -1271,7 +1271,7 @@ def setlconoff(setno, srate, yesno):
     db59 = pymysql.connect(host=hostenv, user=userenv, password=passwordenv, db=dbenv, charset=charsetenv)
     cur59 = db59.cursor()
     try:
-        sql = "UPDATE traceSetup SET bidRate = %s, askRate = %s where setupNo=%s"
+        sql = "UPDATE bixxSetup SET bidRate = %s, askRate = %s where setupNo=%s"
         cur59.execute(sql, (yesno, srate, setno))
         db59.commit()
     except Exception as e:
